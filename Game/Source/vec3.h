@@ -1,7 +1,7 @@
 #ifndef __VEC3_H__
 #define __VEC3_H__
 
-#include"Source/Defs.h"
+#include"Defs.h"
 #include <math.h>
 
 template<class TYPE>
