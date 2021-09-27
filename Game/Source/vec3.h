@@ -104,8 +104,13 @@ public:
 		TYPE fy = y - v.y;
 		TYPE fz = z - v.z;
 
-		return sqrtf((fx * fx) + (fy * fy)+(fz*fz));
+		TYPE S = sqrtf((x - fx) ^ 2 + (y - fy) ^ 2 + (z - fz) ^ 2);
+
+		return S;
 	}
 };
+
+typedef vec3<int> ivec3;
+typedef vec3<float> fvec3;
 
 #endif
