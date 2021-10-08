@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Scene.h"
+#include "Map.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -30,8 +31,11 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-	img = app->tex->Load("Assets/Textures/test.png");
-	app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
+	// L03: DONE: Load map
+	app->map->Load("hello.tmx");
+
+	//img = app->tex->Load("Assets/textures/test.png");
+	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	return true;
 }
 
@@ -44,6 +48,13 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+    // L02: DONE 3: Request Load / Save when pressing L/S
+	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		app->LoadGameRequest();
+
+	if(app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+		app->SaveGameRequest();
+
 	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y -= 1;
 
@@ -56,7 +67,15 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += 1;
 
-	app->render->DrawTexture(img, 380, 100);
+	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
+
+	// Draw map
+	app->map->Draw();
+
+	// L03: TODO 7: Set the window title with map/tileset info
+	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d", 0, 0, 0, 0, 0);
+
+	app->win->SetTitle(title.GetString());
 
 	return true;
 }
