@@ -105,8 +105,14 @@ bool Map::LoadMap(pugi::xml_node mapFile)
 bool Map::LoadTileSet(pugi::xml_node mapFile){
 
     bool ret = true; 
-
-    
+   
+    for (pugi::xml_node tileset = mapFile.child("tileset"); tileset; tileset = tileset.next_sibling("tileset"))
+    {
+        TileSet* Tilesetelem = new TileSet();
+        Tilesetelem->firstgid = tileset.attribute("firstgid").as_int();
+        Tilesetelem->columns = tileset.attribute("columns").as_int();
+        Tilesetelem->texture=tileset.attribute("tmw_desert_spacing.png").
+    }
 
     return ret;
 }
