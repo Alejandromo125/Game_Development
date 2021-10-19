@@ -18,8 +18,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	input = new Input();
 	win = new Window();
+	input = new Input();
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
@@ -28,8 +28,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
-	AddModule(input);
 	AddModule(win);
+	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(scene);
@@ -87,7 +87,7 @@ bool App::Awake()
 		ListItem<Module*>* item;
 		item = modules.start;
 
-		while (item != NULL && ret == true)
+		while ((item != NULL) && (ret == true))
 		{
 			// L01: DONE 5: Add a new argument to the Awake method to receive a pointer to an xml node.
 			// If the section with the module name exists in config.xml, fill the pointer with the valid xml_node
@@ -277,65 +277,37 @@ const char* App::GetOrganization() const
 // Load / Save
 void App::LoadGameRequest()
 {
+	// NOTE: We should check if SAVE_STATE_FILENAME actually exist
 	loadGameRequested = true;
 }
 
 // ---------------------------------------
 void App::SaveGameRequest() const
 {
+	// NOTE: We should check if SAVE_STATE_FILENAME actually exist and... should we overwriten
 	saveGameRequested = true;
 }
 
 // ---------------------------------------
-// L02: DONE 5: Create a method to actually load an xml file
+// L02: TODO 5: Create a method to actually load an xml file
 // then call all the modules to load themselves
 bool App::LoadGame()
 {
-	bool ret = true;
+	bool ret = false;
 
-	pugi::xml_document gameStateFile;
-	pugi::xml_parse_result result = gameStateFile.load_file("savegame.xml");
-
-	if (result == NULL)
-	{
-		LOG("Could not load xml file savegame.xml. pugi error: %s", result.description());
-		ret = false;
-	}
-	else
-	{
-		ListItem<Module*>* item;
-		item = modules.start;
-
-		while (item != NULL && ret == true)
-		{
-			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
-			item = item->next;
-		}
-	}
+	//...
 
 	loadGameRequested = false;
 
 	return ret;
 }
 
-// L02: DONE 7: Implement the xml save method for current state
+// L02: TODO 7: Implement the xml save method for current state
 bool App::SaveGame() const
 {
-	bool ret = false;
+	bool ret = true;
 
-	pugi::xml_document* saveDoc = new pugi::xml_document();
-	pugi::xml_node saveStateNode = saveDoc->append_child("save_state");
-
-	ListItem<Module*>* item;
-	item = modules.start;
-
-	while (item != NULL)
-	{
-		ret = item->data->SaveState(saveStateNode.append_child(item->data->name.GetString()));
-		item = item->next;
-	}
-
-	ret = saveDoc->save_file("savegame.xml");
+	//...
 
 	saveGameRequested = false;
 
